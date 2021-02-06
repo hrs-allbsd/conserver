@@ -329,7 +329,7 @@ typedef int socklen_t;
 #endif
 
 #ifndef INADDR_STYPE
-# if USE_IPV6
+# if USE_GETADDRINFO
 #  define INADDR_STYPE struct sockaddr_storage
 # else
 #  define INADDR_STYPE struct in_addr
@@ -337,7 +337,7 @@ typedef int socklen_t;
 #endif
 
 #ifndef SOCKADDR_STYPE
-# if USE_IPV6
+# if USE_GETADDRINFO
 #  define SOCKADDR_STYPE struct sockaddr_storage
 # else
 #  define SOCKADDR_STYPE struct sockaddr_in

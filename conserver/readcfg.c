@@ -5209,7 +5209,7 @@ ReReadCfg(int fd, int msfd)
     /* if no one can use us we need to come up with a default
      */
     if (pACList == (ACCESS *)0)
-#if USE_IPV6
+#if USE_GETADDRINFO
 	SetDefAccess();
 #else
 	SetDefAccess(myAddrs, myHostname);
@@ -5371,11 +5371,12 @@ ReReadCfg(int fd, int msfd)
 	    GRPENT *pGE;
 	    int local = 0, remote = 0;
 	    unsigned short port;
+
 	    for (pGE = pGroups; pGE != (GRPENT *)0; pGE = pGE->pGEnext)
 		local += pGE->imembers;
 	    for (pRC = pRCList; (REMOTE *)0 != pRC; pRC = pRC->pRCnext)
 		remote++;
-#if USE_IPV6
+#if USE_GETADDRINFO
 	    switch (bindAddr->ai_family) {
 	    case AF_INET:
 		port = ((struct sockaddr_in *)bindAddr)->sin_port;

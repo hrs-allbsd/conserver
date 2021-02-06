@@ -44,7 +44,7 @@ typedef struct access {
 
 extern char AccType(INADDR_STYPE *, char **);
 extern void SetDefAccess(
-#if USE_IPV6
+#if USE_GETADDRINFO
 			    void
 #else
 			    struct in_addr *, char *

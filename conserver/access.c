@@ -42,7 +42,7 @@
 #include <readcfg.h>
 #include <main.h>
 
-#if USE_IPV6
+#if USE_GETADDRINFO
 # include <net/if.h>
 # include <ifaddrs.h>
 # include <sys/socket.h>
@@ -128,7 +128,7 @@ AccType(INADDR_STYPE *addr, char **peername)
     ACCESS *pACtmp;
     socklen_t so;
     char ret;
-#if USE_IPV6
+#if USE_GETADDRINFO
     int error;
     char host[NI_MAXHOST];
     char ipaddr[NI_MAXHOST];
@@ -140,12 +140,12 @@ AccType(INADDR_STYPE *addr, char **peername)
 # endif
 
     CONDDEBUG((1, "AccType(): ip=%s", inet_ntoa(*addr)));
-#endif /* USE_IPV6 */
+#endif /* USE_GETADDRINFO */
 
     ret = config->defaultaccess;
     so = sizeof(*addr);
 
-#if USE_IPV6
+#if USE_GETADDRINFO
     error =
 	getnameinfo((struct sockaddr *)addr, so, ipaddr, sizeof(ipaddr),
 		    NULL, 0, NI_NUMERICHOST);
@@ -312,13 +312,13 @@ AccType(INADDR_STYPE *addr, char **peername)
 	free(revNames);
     }
 # endif
-#endif /* USE_IPV6 */
+#endif /* USE_GETADDRINFO */
     return ret;
 }
 
 void
 SetDefAccess(
-#if USE_IPV6
+#if USE_GETADDRINFO
 		void
 #else
 		struct in_addr *pAddr, char *pHost
@@ -326,11 +326,11 @@ SetDefAccess(
     )
 {
     ACCESS *a;
-#if USE_IPV6
+#if USE_GETADDRINFO
     int error;
     char addr[NI_MAXHOST];
     struct ifaddrs *myAddrs, *ifa;
-#endif /* USE_IPV6 */
+#endif /* USE_GETADDRINFO */
 
     while (pACList != (ACCESS *)0) {
 	a = pACList->pACnext;
@@ -338,7 +338,7 @@ SetDefAccess(
 	pACList = a;
     }
 
-#if USE_IPV6
+#if USE_GETADDRINFO
     /* get list of all addresses on system */
     error = getifaddrs(&myAddrs);
     if (error) {

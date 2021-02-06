@@ -5026,8 +5026,8 @@ Spawn(GRPENT *pGE, int msfd)
 {
     pid_t pid;
     int sfd;
-#if USE_IPV6 || !USE_UNIX_DOMAIN_SOCKETS
-# if USE_IPV6
+#if USE_GETADDRINFO || !USE_UNIX_DOMAIN_SOCKETS
+# if USE_GETADDRINFO
     int error;
     struct addrinfo *rp, hints, *res;
     char host[NI_MAXHOST];
@@ -5046,7 +5046,7 @@ Spawn(GRPENT *pGE, int msfd)
     static STRING *portPath = (STRING *)0;
 #endif
 
-#if !USE_IPV6
+#if !USE_GETADDRINFO
     /* get a socket for listening */
 # if HAVE_MEMSET
     memset((void *)&lstn_port, 0, sizeof(lstn_port));
@@ -5055,7 +5055,7 @@ Spawn(GRPENT *pGE, int msfd)
 # endif
 #endif
 
-#if USE_IPV6
+#if USE_GETADDRINFO
     for (rp = bindBaseAddr; rp != NULL; rp = rp->ai_next) {
 	if ((sfd =
 	     socket(rp->ai_family, rp->ai_socktype,

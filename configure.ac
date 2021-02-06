@@ -22,7 +22,7 @@ AH_TEMPLATE([HAVE_SA_LEN],[Defined if sa_len member exists in struct sockaddr])
 AH_TEMPLATE([TRUST_REVERSE_DNS],[Defined if we trust reverse DNS])
 AH_TEMPLATE([USE_EXTENDED_MESSAGES],[Defined if we produce extended messages])
 AH_TEMPLATE([USE_UNIX_DOMAIN_SOCKETS],[Defined if we use Unix domain sockets])
-AH_TEMPLATE([USE_IPV6], [Defined if building with IPv6 support])
+AH_TEMPLATE([USE_GETADDRINFO], [Defined if building with getaddrinfo() support])
 AH_TEMPLATE([UDSDIR], [Directory for Unix domain sockets])
 AH_TEMPLATE([FOR_CYCLADES_TS], [Defined if building for a Cyclades TS])
 AH_TEMPLATE([REQ_SERVER_CERT], [Defined if client requires server SSL certificate])
@@ -818,16 +818,16 @@ AC_ARG_WITH(pam,
 	    AC_MSG_RESULT(no)
 	fi],[AC_MSG_RESULT(no)])
 
-cons_with_ipv6="NO"
-AC_MSG_CHECKING(whether to support IPv6)
-AC_ARG_WITH(ipv6,
-	AS_HELP_STRING([--with-ipv6],
-	    [(experimental) Use IPv6 for client/server communication]),
+cons_with_getaddrinfo="NO"
+AC_MSG_CHECKING(whether to support getaddrinfo)
+AC_ARG_WITH(getaddrinfo,
+	AS_HELP_STRING([--with-getaddrinfo],
+	    [(experimental) Use getaddrinfo() for client/server communication.  This enables IPv6 support]),
 	[case "$withval" in
 	    yes)
-		AC_DEFINE(USE_IPV6)
+		AC_DEFINE(USE_GETADDRINFO)
 		AC_MSG_RESULT(yes)
-		cons_with_ipv6="YES"
+		cons_with_getaddrinfo="YES"
 		;;
 	    *)
 		AC_MSG_RESULT(no)
@@ -883,7 +883,7 @@ echo "         strip @REALM (--with-striprealm): $cons_strip_realm"
 fi
 echo "              dmalloc (--with-dmalloc)   : $cons_with_dmalloc"
 echo "          PAM support (--with-pam)       : $cons_with_pam"
-echo "         IPv6 support (--with-ipv6)      : $cons_with_ipv6"
+echo "  getaddrinfo support (--with-getaddrinfo): $cons_with_getaddrinfo"
 echo ""
 echo "=============================================================="
 ]

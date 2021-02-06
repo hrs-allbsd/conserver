@@ -52,7 +52,7 @@ int fAll = 0, fNoinit = 0, fVersion = 0, fStrip = 0, fReopen =
 
 char *pcConfig = CONFIGFILE;
 int cMaxMemb = MAXMEMB;
-#if USE_IPV6
+#if USE_GETADDRINFO
 struct addrinfo *bindAddr;
 struct addrinfo *bindBaseAddr;
 #else
@@ -779,7 +779,7 @@ DestroyDataStructures(void)
 	DH_free(dh4096);
 #endif
 
-#if USE_IPV6
+#if USE_GETADDRINFO
     /* clean up addrinfo stucts */
     freeaddrinfo(bindAddr);
     freeaddrinfo(bindBaseAddr);
@@ -1236,7 +1236,7 @@ main(int argc, char **argv)
     int curuid = 0;
     GRPENT *pGE = (GRPENT *)0;
 #if !USE_UNIX_DOMAIN_SOCKETS
-# if USE_IPV6
+# if USE_GETADDRINFO
     int s;
     struct addrinfo hints;
 # else
@@ -1449,7 +1449,7 @@ main(int argc, char **argv)
 	Error("gethostname(): %s", strerror(errno));
 	Bye(EX_OSERR);
     }
-#if !USE_IPV6
+#if !USE_GETADDRINFO
     ProbeInterfaces(bindAddr);
 #endif
 #if !HAVE_CLOSEFROM
@@ -1480,7 +1480,7 @@ main(int argc, char **argv)
     if (config->primaryport == (char *)0)
 	OutOfMem();
 
-# if !USE_IPV6
+# if !USE_GETADDRINFO
     /* Look for non-numeric characters */
     for (i = 0; config->primaryport[i] != '\000'; i++)
 	if (!isdigit((int)config->primaryport[i]))
@@ -1512,7 +1512,7 @@ main(int argc, char **argv)
     if (config->secondaryport == (char *)0)
 	OutOfMem();
 
-# if !USE_IPV6
+# if !USE_GETADDRINFO
     /* Look for non-numeric characters */
     for (i = 0; config->secondaryport[i] != '\000'; i++)
 	if (!isdigit((int)config->secondaryport[i]))
@@ -1535,7 +1535,7 @@ main(int argc, char **argv)
 # endif
 #endif
 
-#if USE_IPV6
+#if USE_GETADDRINFO
     /* set up the address to bind to */
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
@@ -1748,7 +1748,7 @@ main(int argc, char **argv)
 	/* if no one can use us we need to come up with a default
 	 */
 	if (pACList == (ACCESS *)0)
-#if USE_IPV6
+#if USE_GETADDRINFO
 	    SetDefAccess();
 #else
 	    SetDefAccess(myAddrs, myHostname);
@@ -1775,7 +1775,7 @@ main(int argc, char **argv)
 	    for (pRC = pRCList; (REMOTE *)0 != pRC; pRC = pRC->pRCnext)
 		remote++;
 	    setproctitle("master: port %hu, %d local, %d remote",
-# if USE_IPV6
+# if USE_GETADDRINFO
 			 config->primaryport,
 # elif USE_UNIX_DOMAIN_SOCKETS
 			 (unsigned short)0,

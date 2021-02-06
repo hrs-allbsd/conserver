@@ -41,10 +41,10 @@
 #include <group.h>
 #include <readcfg.h>
 
-#if USE_IPV6
+#if USE_GETADDRINFO
 # include <sys/socket.h>
 # include <netdb.h>
-#endif /* USE_IPV6 */
+#endif /* USE_GETADDRINFO */
 
 #if defined(USE_LIBWRAP)
 # include <syslog.h>
@@ -490,10 +490,10 @@ ClientAccessOk(CONSCLIENT *pCL)
     char *peername = (char *)0;
     int retval = 1;
 
-#if USE_IPV6 || !USE_UNIX_DOMAIN_SOCKETS
+#if USE_GETADDRINFO || !USE_UNIX_DOMAIN_SOCKETS
     socklen_t so;
     int cfd;
-# if USE_IPV6
+# if USE_GETADDRINFO
     int error;
     char addr[NI_MAXHOST];
 # endif
@@ -525,7 +525,7 @@ ClientAccessOk(CONSCLIENT *pCL)
 	goto setpeer;
     }
     pCL->caccess = AccType(
-# if USE_IPV6
+# if USE_GETADDRINFO
 			      &in_port,
 # else
 			      &in_port.sin_addr,
@@ -557,7 +557,7 @@ ClientAccessOk(CONSCLIENT *pCL)
 	BuildString((char *)0, pCL->peername);
 	if (peername != (char *)0)
 	    BuildString(peername, pCL->peername);
-#if USE_IPV6
+#if USE_GETADDRINFO
 	else if (getpeer != -1) {
 	    error =
 		getnameinfo((struct sockaddr *)&in_port, so, addr,

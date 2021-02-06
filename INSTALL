@@ -181,8 +181,9 @@ Detailed Instructions
         --with-freeipmi[=PATH]  Compile in FreeIPMI support
         --with-dmalloc[=PATH]   Compile in dmalloc support
         --with-pam              Enable PAM support
-        --with-ipv6             (experimental) Use IPv6 for client/server
-                                communication
+        --with-getaddrinfo      (experimental) Use getaddrinfo for
+                                client/server communication.  This enables
+                                IPv6 support
 
       Not surprisingly, some match the old conserver/cons.h items...here
       they are for reference:

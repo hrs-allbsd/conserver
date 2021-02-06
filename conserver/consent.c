@@ -873,7 +873,7 @@ ConsInit(CONSENT *pCE)
 	    break;
 	case HOST:
 	    {
-#if USE_IPV6
+#if USE_GETADDRINFO
 		int error;
 		char host[NI_MAXHOST];
 		char serv[NI_MAXSERV];
@@ -881,13 +881,13 @@ ConsInit(CONSENT *pCE)
 #else
 		struct sockaddr_in port;
 		struct hostent *hp;
-#endif /* USE_IPV6 */
+#endif /* USE_GETADDRINFO */
 #if HAVE_SETSOCKOPT
 		int one = 1;
 #endif
 		Sleep(100000);	/* Not all terminal servers can keep up */
 
-#if USE_IPV6
+#if USE_GETADDRINFO
 # if HAVE_MEMSET
 		memset(&hints, 0, sizeof(hints));
 # else
@@ -1008,7 +1008,7 @@ ConsInit(CONSENT *pCE)
 			return;
 		    }
 		}
-#endif /* USE_IPV6 */
+#endif /* USE_GETADDRINFO */
 	    }
 	    if ((pCE->cofile =
 		 FileOpenFD(cofile, simpleSocket)) == (CONSFILE *)0) {
@@ -1267,7 +1267,7 @@ ConsInit(CONSENT *pCE)
 int
 AddrsMatch(char *addr1, char *addr2)
 {
-#if USE_IPV6
+#if USE_GETADDRINFO
     int error, ret = 0;
     struct addrinfo *ai1, *ai2, hints;
 #else
@@ -1281,13 +1281,13 @@ AddrsMatch(char *addr1, char *addr2)
     struct in_addr inetAddr1;
     struct in_addr inetAddr2;
 # endif
-#endif /* USE_IPV6 */
+#endif /* USE_GETADDRINFO */
 
     /* first try simple character string match */
     if (strcasecmp(addr1, addr2) == 0)
 	return 1;
 
-#if USE_IPV6
+#if USE_GETADDRINFO
 # if HAVE_MEMSET
     memset(&hints, 0, sizeof(hints));
 # else
@@ -1452,7 +1452,7 @@ AddrsMatch(char *addr1, char *addr2)
 	}
     }
     return 0;
-#endif /* USE_IPV6 */
+#endif /* USE_GETADDRINFO */
 }
 
 /* thread ther list of uniq console server machines, aliases for	(ksb)

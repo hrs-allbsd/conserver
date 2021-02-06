@@ -522,7 +522,7 @@ DoNormalRead(CONSCLIENT *pCLServing)
 		int iSep = 1;
 
 		if ((GRPENT *)0 != pGroups) {
-#if USE_IPV6 || !USE_UNIX_DOMAIN_SOCKETS
+#if USE_GETADDRINFO || !USE_UNIX_DOMAIN_SOCKETS
 		    SOCKADDR_STYPE lcl;
 
 		    socklen_t so = sizeof(lcl);
@@ -536,7 +536,7 @@ DoNormalRead(CONSCLIENT *pCLServing)
 			      FileFDNum(pCLServing->fd), strerror(errno));
 			iSep = -1;
 		    } else {
-# if USE_IPV6
+# if USE_GETADDRINFO
 			int error;
 			char addr[NI_MAXHOST];
 			error =
@@ -683,8 +683,8 @@ Master(void)
     int msfd;
     socklen_t so;
     fd_set rmask, wmask;
-#if USE_IPV6 || !USE_UNIX_DOMAIN_SOCKETS
-# if USE_IPV6
+#if USE_GETADDRINFO || !USE_UNIX_DOMAIN_SOCKETS
+# if USE_GETADDRINFO
     struct addrinfo *rp;
 # else
     struct sockaddr_in master_port;
@@ -734,7 +734,7 @@ Master(void)
 
     /* set up port for master to listen on
      */
-#if !USE_IPV6
+#if !USE_GETADDRINFO
 # if HAVE_MEMSET
     memset((void *)&master_port, 0, sizeof(master_port));
 # else
@@ -742,7 +742,7 @@ Master(void)
 # endif
 #endif
 
-#if USE_IPV6
+#if USE_GETADDRINFO
     for (rp = bindAddr; rp != NULL; rp = rp->ai_next) {
 	if ((msfd =
 	     socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol)) < 0)
@@ -975,7 +975,7 @@ Master(void)
 	dmallocMarkClientConnection = dmalloc_mark();
 #endif
 
-#if !USE_IPV6
+#if !USE_GETADDRINFO
 	so = sizeof(struct sockaddr_in);
 #endif
 	for (cfd = 0; cfd == 0;) {

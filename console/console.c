@@ -39,7 +39,7 @@
 #if HAVE_GSSAPI
 # include <gssapi/gssapi.h>
 #endif
-#if USE_IPV6
+#if USE_GETADDRINFO
 # include <sys/socket.h>
 # include <netdb.h>
 #endif
@@ -505,7 +505,7 @@ CONSFILE *
 GetPort(char *pcToHost, unsigned short sPort)
 {
     int s;
-#if USE_IPV6
+#if USE_GETADDRINFO
     int error;
     char host[NI_MAXHOST];
     char serv[NI_MAXSERV];
@@ -521,7 +521,7 @@ GetPort(char *pcToHost, unsigned short sPort)
     int one = 1;
 #endif
 
-#if USE_IPV6
+#if USE_GETADDRINFO
 # if HAVE_MEMSET
     memset(&hints, 0, sizeof(hints));
 # else
@@ -535,7 +535,7 @@ GetPort(char *pcToHost, unsigned short sPort)
 # endif
 #endif
 
-#if USE_IPV6
+#if USE_GETADDRINFO
     hints.ai_flags = AI_ADDRCONFIG;
     hints.ai_socktype = SOCK_STREAM;
     snprintf(serv, sizeof(serv), "%hu", sPort);
@@ -728,7 +728,7 @@ DestroyDataStructures(void)
     DestroyConfig(optConf);
     DestroyConfig(config);
     DestroyTerminal(pTerm);
-#if !USE_IPV6
+#if !USE_GETADDRINFO
     if (myAddrs != (struct in_addr *)0)
 	free(myAddrs);
 #endif
@@ -1617,7 +1617,7 @@ DoCmds(char *master, char *pports, int cmdi)
 #endif
 
 	if (*ports == '\000') {
-#if USE_IPV6
+#if USE_GETADDRINFO
 	    port = bindPort;
 #elif USE_UNIX_DOMAIN_SOCKETS
 	    port = 0;
@@ -1628,7 +1628,7 @@ DoCmds(char *master, char *pports, int cmdi)
 	    Error("invalid port spec for %s: `%s'", serverName, ports);
 	    continue;
 	} else {
-#if USE_IPV6
+#if USE_GETADDRINFO
 	    port = (short)atoi(ports);
 #elif USE_UNIX_DOMAIN_SOCKETS
 	    port = (short)atoi(ports);
@@ -2198,7 +2198,7 @@ main(int argc, char **argv)
 	Version();
 	Bye(EX_OK);
     }
-#if !USE_IPV6
+#if !USE_GETADDRINFO
     ProbeInterfaces(INADDR_ANY);
 #endif
 

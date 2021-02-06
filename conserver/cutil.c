@@ -10,7 +10,7 @@
 #include <version.h>
 
 #include <net/if.h>
-#if USE_IPV6
+#if USE_GETADDRINFO
 # include <ifaddrs.h>
 #endif
 #if HAVE_SYS_SOCKIO_H
@@ -28,7 +28,7 @@ pid_t thepid = 0;
 int fDebug = 0;
 STRING *allStrings = (STRING *)0;
 int stringCount = 0;		/* count of allStrings list */
-#if !USE_IPV6
+#if !USE_GETADDRINFO
 struct in_addr *myAddrs = (struct in_addr *)0;
 #endif
 char myHostname[MAXHOSTNAME];	/* staff.cc.purdue.edu                  */
@@ -1845,7 +1845,7 @@ PruneSpace(char *string)
 	return string;
 }
 
-#if !USE_IPV6
+#if !USE_GETADDRINFO
 /* fills the myAddrs array with host interface addresses */
 void
 ProbeInterfaces(in_addr_t bindAddr)
@@ -2054,12 +2054,12 @@ ProbeInterfaces(in_addr_t bindAddr)
     }
 # endif
 }
-#endif /* USE_IPV6 */
+#endif /* USE_GETADDRINFO */
 
 int
 IsMe(char *id)
 {
-#if USE_IPV6
+#if USE_GETADDRINFO
     int ret = 0;
     int error;
     struct addrinfo hints;
@@ -2184,7 +2184,7 @@ IsMe(char *id)
 	}
     }
     return 0;
-#endif /* USE_IPV6 */
+#endif /* USE_GETADDRINFO */
 }
 
 #if HAVE_OPENSSL

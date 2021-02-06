@@ -36,7 +36,7 @@
  */
 extern int fAll, fNoinit, fInteractive, fStrip, fDaemon, fReopen,
     fNoautoreup, fSyntaxOnly;
-#if USE_IPV6
+#if USE_GETADDRINFO
 extern struct addrinfo *bindAddr;
 extern struct addrinfo *bindBaseAddr;
 #else

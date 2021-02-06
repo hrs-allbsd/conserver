@@ -138,7 +138,7 @@ extern char *progname;
 extern pid_t thepid;
 #define MAXHOSTNAME 1024
 extern char myHostname[];
-#if !USE_IPV6
+#if !USE_GETADDRINFO
 extern struct in_addr *myAddrs;
 #endif
 extern fd_set rinit;
@@ -208,7 +208,7 @@ extern int ParseIACBuf(CONSFILE *, void *, int *);
 extern void *MemMove(void *, void *, size_t);
 extern char *StringChar(STRING *, int, char);
 extern void ParseFile(char *, FILE *, int);
-#if !USE_IPV6
+#if !USE_GETADDRINFO
 extern void ProbeInterfaces(in_addr_t);
 #endif
 extern void ProcessSubst(SUBST *, char **, char **, char *, char *);
