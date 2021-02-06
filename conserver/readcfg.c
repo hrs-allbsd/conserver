@@ -5370,11 +5370,26 @@ ReReadCfg(int fd, int msfd)
 	    REMOTE *pRC;
 	    GRPENT *pGE;
 	    int local = 0, remote = 0;
+	    unsigned short port;
 	    for (pGE = pGroups; pGE != (GRPENT *)0; pGE = pGE->pGEnext)
 		local += pGE->imembers;
 	    for (pRC = pRCList; (REMOTE *)0 != pRC; pRC = pRC->pRCnext)
 		remote++;
-	    setproctitle("master: port %hu, %d local, %d remote", bindPort,
+#if USE_IPV6
+	    switch (bindAddr->ai_family) {
+	    case AF_INET:
+		port = ((struct sockaddr_in *)bindAddr)->sin_port;
+		break;
+	    case AF_INET6:
+		port = ((struct sockaddr_in6 *)bindAddr)->sin6_port;
+		break;
+	    default:
+		port = 0;
+	    }
+#else
+	    port = bindPort;
+#endif
+	    setproctitle("master: port %hu, %d local, %d remote", port,
 			 local, remote);
 	} else
 	    setproctitle("group %u: port %hu, %d %s", pGroups->id,
