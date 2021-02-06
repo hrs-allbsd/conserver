@@ -1540,13 +1540,19 @@ main(int argc, char **argv)
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
     hints.ai_flags |= AI_PASSIVE;
 
+    if ((interface[0] == '*' && interface[1] == '\000'))
+	interface = NULL;
     /* create list or IPs suitable for primaryport */
     s = getaddrinfo(interface, config->primaryport, &hints, &bindAddr);
     if (s) {
 	Error("getaddrinfo(%s): %s", interface, gai_strerror(s));
 	Bye(EX_OSERR);
+    }
+    if (bindAddr->ai_next != NULL) {
+	Error("getaddrinfo(%s): returned multiple addresses", interface);
     }
 
     /* create list or IPs suitable for secondaryport */
